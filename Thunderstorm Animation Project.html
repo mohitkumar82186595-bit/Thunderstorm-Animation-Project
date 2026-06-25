@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thunderstorm Animation</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+overflow:hidden;
+height:100vh;
+background:linear-gradient(to bottom,#07121f,#0d1b2a,#000);
+position:relative;
+}
+
+/* Sky Flash */
+.flash{
+position:absolute;
+width:100%;
+height:100%;
+background:white;
+opacity:0;
+pointer-events:none;
+z-index:20;
+}
+
+/* Clouds */
+.cloud{
+position:absolute;
+background:#1b263b;
+border-radius:100px;
+filter:blur(8px);
+}
+
+.cloud::before,
+.cloud::after{
+content:'';
+position:absolute;
+background:#1b263b;
+border-radius:50%;
+}
+
+.cloud1{
+width:250px;
+height:80px;
+top:80px;
+left:-300px;
+animation:moveCloud 25s linear infinite;
+}
+
+.cloud1::before{
+width:120px;
+height:120px;
+left:30px;
+top:-50px;
+}
+
+.cloud1::after{
+width:140px;
+height:140px;
+right:20px;
+top:-60px;
+}
+
+.cloud2{
+width:350px;
+height:100px;
+top:180px;
+left:-400px;
+animation:moveCloud 35s linear infinite;
+animation-delay:5s;
+}
+
+.cloud2::before{
+width:140px;
+height:140px;
+left:60px;
+top:-60px;
+}
+
+.cloud2::after{
+width:180px;
+height:180px;
+right:30px;
+top:-80px;
+}
+
+@keyframes moveCloud{
+from{
+transform:translateX(0);
+}
+to{
+transform:translateX(1800px);
+}
+}
+
+/* Rain */
+
+.rain{
+position:absolute;
+width:100%;
+height:100%;
+overflow:hidden;
+z-index:5;
+}
+
+.drop{
+position:absolute;
+bottom:100%;
+width:2px;
+height:20px;
+background:rgba(255,255,255,0.7);
+animation:rain linear infinite;
+}
+
+@keyframes rain{
+to{
+transform:translateY(120vh);
+}
+}
+
+/* Lightning */
+
+.lightning{
+position:absolute;
+top:0;
+left:50%;
+transform:translateX(-50%);
+width:8px;
+height:0;
+background:white;
+box-shadow:
+0 0 10px white,
+0 0 20px white,
+0 0 40px white;
+opacity:0;
+z-index:15;
+}
+
+.lightning.active{
+animation:lightningStrike 0.3s ease;
+}
+
+@keyframes lightningStrike{
+0%{
+height:0;
+opacity:0;
+}
+20%{
+height:70vh;
+opacity:1;
+}
+50%{
+opacity:0.7;
+}
+100%{
+opacity:0;
+height:70vh;
+}
+}
+
+.title{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:4rem;
+color:white;
+font-family:Arial;
+letter-spacing:4px;
+text-shadow:
+0 0 10px white,
+0 0 20px #00d4ff,
+0 0 40px #00d4ff;
+z-index:10;
+}
+</style>
+</head>
+<body>
+
+<div class="flash"></div>
+
+<div class="cloud cloud1"></div>
+<div class="cloud cloud2"></div>
+
+<div class="rain" id="rain"></div>
+
+<div class="lightning" id="lightning"></div>
+
+<div class="title">⚡ THUNDERSTORM ⚡</div>
+
+<script>
+
+const rain = document.getElementById("rain");
+
+for(let i=0;i<250;i++){
+
+let drop = document.createElement("div");
+
+drop.classList.add("drop");
+
+drop.style.left=Math.random()*100+"vw";
+
+drop.style.animationDuration=
+(Math.random()*0.5+0.4)+"s";
+
+drop.style.opacity=Math.random();
+
+drop.style.height=
+(Math.random()*25+15)+"px";
+
+rain.appendChild(drop);
+}
+
+const lightning =
+document.getElementById("lightning");
+
+const flash =
+document.querySelector(".flash");
+
+function strike(){
+
+lightning.style.left=
+Math.random()*100+"%";
+
+lightning.classList.add("active");
+
+flash.style.opacity="0.8";
+
+setTimeout(()=>{
+flash.style.opacity="0";
+},100);
+
+setTimeout(()=>{
+lightning.classList.remove("active");
+},300);
+
+let nextStrike =
+Math.random()*4000+1000;
+
+setTimeout(strike,nextStrike);
+}
+
+strike();
+
+</script>
+
+</body>
+</html>
